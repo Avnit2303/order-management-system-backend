@@ -72,7 +72,12 @@ const connectDB = async () => {
 };
 
 // ─── Serverless Handler ───────────────────────────────────
-const handler = serverless(app);
+const handler = serverless(app, {
+  binary: [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/octet-stream'
+  ]
+});
 
 module.exports.handler = async (event, context) => {
   // Prevent Lambda from waiting for empty event loop

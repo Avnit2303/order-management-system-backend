@@ -120,6 +120,9 @@ const downloadExcel = async (req, res, next) => {
     });
     totalRow.font = { bold: true, size: 12 };
 
+    // Generate Excel as buffer (works in serverless)
+    const buffer = await workbook.xlsx.writeBuffer();
+
     // Set response headers
     res.setHeader(
       'Content-Type',
@@ -130,9 +133,8 @@ const downloadExcel = async (req, res, next) => {
       'attachment; filename=orders.xlsx'
     );
 
-    // Stream workbook to response
-    await workbook.xlsx.write(res);
-    res.end();
+    // Send buffer directly
+    res.send(Buffer.from(buffer));
   } catch (error) {
     next(error);
   }
